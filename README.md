@@ -6,7 +6,7 @@ By Moamen Mohasseb
 
 # Functionality of the application
 
-This application will allow creating/removing/fetching review items. Each review item can optionally have an attachment image. Each user only has access to review items that he/she has created.
+This application will allow creating/updating/removing/fetching review items. Each review item can optionally have an attachment image. Each user only has access to review items that he/she has created.
 
 # review items
 
