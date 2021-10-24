@@ -1,9 +1,8 @@
 export interface Review {
   reviewId: string
   createdAt: string
-  restaurantName: string
-  dueDate: string
-  done: boolean
+  name: string
+  reviewDate: string
   attachmentUrl?: string
   reviewDetails: string
   reviewDegree: Number

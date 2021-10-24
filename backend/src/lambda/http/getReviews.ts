@@ -14,6 +14,12 @@ export const handler = middy(
     if (reviews.count !== 0)
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PATCH',
+        'Access-Control-Allow-Headers': 'Accept'
+      },
       body: JSON.stringify({ items: reviews }),
     }
 

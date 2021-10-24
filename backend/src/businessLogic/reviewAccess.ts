@@ -2,7 +2,6 @@ import * as AWS from 'aws-sdk'
 //import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import {reviewItem} from "../models/ReviewItem"
-import { UpdateReviewRequest } from "../requests/UpdateReviewRequest";
 const AWSXRay = require('aws-xray-sdk');
 const XAWS = AWSXRay.captureAWS(AWS);
 export default class reviewAccess {
@@ -100,35 +99,5 @@ async  accessCreateAttachmentPresignedUrl(
 
   return allItems.Items;
 }
- async  accessUpdatereview(  reviewId: String,
-   updatedreview: UpdateReviewRequest,
-    userId: String
-  ): Promise<any>{
-    try{
-       const params = {
-      TableName: this.Tabel_Name,
-      Key: {
-        userId: userId,
-        reviewId: reviewId
-      },
-      ExpressionAttributeNames: {
-        '#review_name': 'name',
-      },
-      ExpressionAttributeValues: {
-        ':name': updatedreview.restaurantName,
-        ':dueDate': updatedreview.dueDate,
-        ':done': updatedreview.done,
-      },
-      UpdateExpression: 'SET #review_name = :name, dueDate = :dueDate, done = :done',
-      ReturnValues: 'ALL_NEW',
-    };
-    const result = await this.docClient.update(params).promise();
-    console.log(`Update statement has completed without error`, result);
-    return result
-   }
-   catch(error){
-     console.log(`update error ${error}`)
-     return `update error ${error}`
-  }
-  }
 }
+ 

@@ -1,20 +1,19 @@
 import dateFormat from 'dateformat'
 import { History } from 'history'
-import update from 'immutability-helper'
 import * as React from 'react'
 import {
   Button,
-  Checkbox,
   Divider,
   Grid,
   Header,
   Icon,
   Input,
   Image,
-  Loader
+  Loader,
+  Label
 } from 'semantic-ui-react'
 
-import { createreview, deletereview, getreviews, updatereview } from '../api/reviews-api'
+import { createreview, deletereview, getreviews } from '../api/reviews-api'
 import Auth from '../auth/Auth'
 import { Review } from '../types/Review'
 
@@ -58,18 +57,17 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
     try {
       if(this.state.newReviewDegree>=0&&this.state.newReviewDegree<=5)
       {if(this.state.newreviewName.length>0){
-      const dueDate = this.calculateDueDate()
       const newreview = await createreview(this.props.auth.getIdToken(), {
-        restaurantName: this.state.newreviewName ,
+        name: this.state.newreviewName ,
         reviewDetails:this.state.newReviewDetails,
         reviewDegree:this.state.newReviewDegree,
-        dueDate
+        reviewDate: dateFormat(new Date(), 'yyyy-mm-dd') as string 
       })
       this.setState({
         reviews: [...this.state.reviews, newreview],
         newreviewName: ''
       })}
-      else{alert('Enter restaurantName')}}
+      else{alert('Enter name')}}
       else{alert('Review Degree from 0 to 5')}
     } catch {
       alert('review creation failed')
@@ -87,29 +85,7 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
     }
   }
 
-  onreviewCheck = async (pos: number) => {
-    try {
-      const review = this.state.reviews[pos]
-      console.log(this.props.auth.getIdToken(), review.reviewId, {
-        name: review.restaurantName,
-        dueDate: review.dueDate,
-        done: !review.done
-      })
-      await updatereview(this.props.auth.getIdToken(), review.reviewId, {
-        name: review.restaurantName,
-        dueDate: review.dueDate,
-        done: !review.done
-      })
-      this.setState({
-        reviews: update(this.state.reviews, {
-          [pos]: { done: { $set: !review.done } }
-        })
-      })
-    } catch(error:any) {
-      alert(`review Update failed ${error.message}`)
-    }
-  }
-
+ 
   async componentDidMount() {
     try {
       const reviews = await getreviews(this.props.auth.getIdToken())
@@ -158,16 +134,12 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
           <Divider />
         </Grid.Column>
         <Grid.Column width={10}>
+        <Label size="large">Review Degree...</Label>
         <Input
-            action={{
-              color: 'Teal',
-              labelPosition: 'left',
-              content: 'Review Degree  ',
-             // onClick: this.onreviewCreate
-            }}
+            
             actionPosition="left"
-           // placeholder="Review Degree...  "
-            Value="0"
+            placeholder="From 1 to 5 Stars  "
+           // value="0"
             onChange={this.handleReviewDegreeChange}
           />       
           </Grid.Column>
@@ -175,14 +147,8 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
           <Divider />
         </Grid.Column>
         <Grid.Column width={10}>
+          <Label size="large">Review Details...</Label>
         <Input
-          action={{
-            color: 'Teal',
-            labelPosition: 'left',
-           
-            content: 'Review Details',
-            
-          }}
             fluid
             actionPosition="left"
             placeholder="Review Details..."
@@ -217,24 +183,28 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
 
   renderreviewsList() {
     return (
-      <Grid padded>
+      <Grid key={Math.random()} padded>
         {this.state.reviews.map((review, pos) => {
           return (
-            <Grid padded>
-            <Grid.Row key={review.reviewId}>
-              <Grid.Column width={1} verticalAlign="middle">
-                <Checkbox
-                  onChange={() => this.onreviewCheck(pos)}
-                  checked={review.done}
-                />
-              </Grid.Column>
+            <Grid  key={review.reviewId} padded>
+            <Grid.Row width={25}>
+             
               <Grid.Column width={10} verticalAlign="middle">
-                {review.restaurantName}
+                <Label size="big">{review.name}</Label>
+            
+                {Array(review.reviewDegree).fill(1,0,Number(review.reviewDegree)).map(()=>{
+                  return(
+                    
+                    <Icon  key={Math.random()} name="star"/>
+                    
+                )
+                })}
+               
               </Grid.Column>
               <Grid.Column width={3} floated="right">
-                {review.reviewDegree}
+                {review.reviewDate}
               </Grid.Column>
-              <Grid.Column width={1} floated="right">
+              <Grid.Column width={1} floated="right" verticalAlign="middle">
                 <Button
                   icon
                   color="blue"
@@ -243,7 +213,7 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
                   <Icon name="pencil" />
                 </Button>
               </Grid.Column>
-              <Grid.Column width={1} floated="right">
+              <Grid.Column width={1} floated="right" verticalAlign="middle">
                 <Button
                   icon
                   color="red"
@@ -253,25 +223,23 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
                 </Button>
               </Grid.Column>
              
-              <Grid.Column width={16}>
-                <Divider />
-              </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
-            <Grid.Column width={16}>
-                <Divider />
-              </Grid.Column>
-              <Grid.Column width={16}>
+            <Grid.Row width={20}>
+              <Grid.Column floated='right' verticalAlign="top" width={16}>
               { review.attachmentUrl && (
                 <Image src={review.attachmentUrl} size="small" wrapped />
               )}
               </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
               <Grid.Column width={16}>
-                <Divider />
+               <Label basic size="large" active> {review.reviewDetails}</Label>
               </Grid.Column>
-              <Grid.Column >
-                {review.reviewDetails}
-              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row width={20}>
+            <Grid.Column>
+          <Divider />
+        </Grid.Column>
             </Grid.Row>
             </Grid>
           )
@@ -280,10 +248,5 @@ export class Reviews extends React.PureComponent<reviewsProps, reviewsState> {
     )
   }
 
-  calculateDueDate(): string {
-    const date = new Date()
-    date.setDate(date.getDate() + 7)
-
-    return dateFormat(date, 'yyyy-mm-dd') as string
-  }
+  
 }

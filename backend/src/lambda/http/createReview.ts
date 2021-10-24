@@ -17,13 +17,18 @@ export const handler = middy(
     const newItem = {
       reviewId: reviewId,
         userId: userid,
-        done:false,    
         ...newreview
     }
     console.log("newItem: ",newItem)
     const newreviewList = await createreview(newItem as reviewItem)
     return {
       statusCode: 201,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PATCH',
+        'Access-Control-Allow-Headers': 'Accept'
+      },
       body: JSON.stringify({
         item: newreviewList,
       }),

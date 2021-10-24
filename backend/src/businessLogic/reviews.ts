@@ -1,5 +1,4 @@
 import {reviewItem} from "../models/ReviewItem"
-import { UpdateReviewRequest } from "../requests/UpdatereviewRequest";
 import reviewAccess from "./reviewAccess";
 //import {accessCreateAttachmentPresignedUrl,accessCreatereview,accessDeletereview,accessGetreviewsForUser,accessUpdatereview} from "./reviewAccess"
 const acessobj= new reviewAccess
@@ -25,10 +24,4 @@ export async function createAttachmentPresignedUrl(
   export async function getreviewsForUser(userId):Promise<any>{
    
   return acessobj.accessGetreviewsForUser(userId);
-}
-export async function updatereview(  reviewId: String,
-    updatedreview: UpdateReviewRequest,
-    userId: String
-  ): Promise<any>{
-return await acessobj.accessUpdatereview(reviewId,updatedreview,userId)
 }

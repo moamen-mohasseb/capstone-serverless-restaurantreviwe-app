@@ -3,10 +3,10 @@
   "title": "group",
   "type": "object",
   "properties": {
-    "restaurantName": {
+    "name": {
       "type": "string"
     },
-    "dueDate": {
+    "reviewDate": {
       "type": "string"
     }
   },
@@ -14,11 +14,11 @@
     "type": "string"
   },
   "reviewDegree": {
-    "type": "integer"
+    "type": "number"
   }, 
   "required": [
-    "restaurantName",
-    "dueDate",
+    "name",
+    "reviewDate",
     "reviewDegree"
   ],
   "additionalProperties": false

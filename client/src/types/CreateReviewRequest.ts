@@ -1,6 +1,6 @@
 export interface CreateReviewRequest {
-  restaurantName: string
+  name: string
   reviewDetails: string
   reviewDegree: Number
-  dueDate: string
+  reviewDate: string
 }
