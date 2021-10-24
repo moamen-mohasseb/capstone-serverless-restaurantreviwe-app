@@ -2,6 +2,7 @@
 By Moamen Mohasseb
     Capstone Project based on ToDO list Project
     AWS serverless cloud system App
+    Its about restaurant food review
 
 # Functionality of the application
 
