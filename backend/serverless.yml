@@ -22,7 +22,7 @@ provider:
   environment:
     reviewS_TABLE: Reviews-${self:provider.stage}
     reviewS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-Reviews-images-moamen-${self:provider.stage}
+    ATTACHMENT_S3_BUCKET: serverless-reviews-images-moamen-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
   logs:
     # Enable API Gateway logs
