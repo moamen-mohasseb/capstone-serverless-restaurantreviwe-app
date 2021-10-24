@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "group",
+  "type": "object",
+  "properties": {
+    "restaurantName": {
+      "type": "string"
+    },
+    "dueDate": {
+      "type": "string"
+    }
+  },
+  "reviewDetails": {
+    "type": "string"
+  },
+  "reviewDegree": {
+    "type": "integer"
+  }, 
+  "required": [
+    "restaurantName",
+    "dueDate",
+    "reviewDegree"
+  ],
+  "additionalProperties": false
+}
